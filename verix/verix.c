@@ -6,13 +6,17 @@
 
 #if SQLITE_OS_VERIX               /* This file is used for Verix only */
 
-#include <Logsys.h>
 #include <stdlib.h>
 #include <string.h>
 #include <svc.h>
 #include <svc_sec.h>
 #include <svctxo.h>
 #include <errno.h>
+
+//#include <Logsys.h>
+//#include <eoslog.h>
+#include "logutil.h"
+#include "logutil.c"
 
 /*
 ** The verixFile structure is a subclass of sqlite3_file* specific to the Verix
@@ -33,7 +37,7 @@ int last_errno = 0;
 
 // 0 = registered
 static int verixLicensedVersion() {
-	int h;
+    int h;
 	int rd;
 	char sn[11+1];
 	char buf[30];
@@ -388,7 +392,7 @@ static int verixOpen(
   char filename[50];
   verixFile *pFile = (verixFile*)id;
 
-  if(verixLicensedVersion()) return SQLITE_CANTOPEN;
+  //if(verixLicensedVersion()) return SQLITE_CANTOPEN;
 
   if(!zName) {
 	sprintf(filename,"tmp%d", read_ticks());
@@ -457,8 +461,9 @@ static int verixDelete(
 		return SQLITE_OK;
 	}
 	else {
-		last_errno = errno;
-		return SQLITE_IOERR_DELETE;
+		return errno == ENOENT ? 
+            SQLITE_IOERR_DELETE_NOENT : 
+            SQLITE_IOERR_DELETE;
 	}
 }
 
@@ -558,7 +563,7 @@ static int verixRandomness(sqlite3_vfs *pVfs, int nBuf, char *zBuf){
 */
 static int verixSleep(sqlite3_vfs *pVfs, int microsec){
 
-	LOG_PRINTF(("verixSleep %d", microsec));
+  LOG_PRINTF(("verixSleep %d", microsec));
 
   SVC_WAIT((microsec+999)/1000);
   return ((microsec+999)/1000)*1000;

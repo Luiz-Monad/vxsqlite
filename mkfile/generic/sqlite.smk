@@ -9,10 +9,12 @@
 # Paths
 #
 
-VRXSDK   =  C:\VerixAps\VFSDK\p2.1.5
-ACT2000  =  C:\VerixAps\ACT2000\p2.0
-VTCPIP   =  C:\VerixAps\TCPIP\P2.4.0M
-VUCL     =  C:\VerixAps\UCL\P2.5.0M
+#VRXSDK   =  C:\VerixAps\VFSDK\p2.1.5
+#ACT2000  =  C:\VerixAps\ACT2000\p2.0
+#VTCPIP   =  C:\VerixAps\TCPIP\P2.4.0M
+#VUCL     =  C:\VerixAps\UCL\P2.5.0M
+ACT2000   =  $(EVOACT)
+VRXSDK    =  $(EVOSDK)
 
 ACTIncludes = $(ACT2000)\include
 SDSIncludes = $(VRXSDK)\include
@@ -28,7 +30,7 @@ ObjDir = ..\..\build\obj\lib
 OutDir = ..\..\build\out\lib
 
 
-ACTLibraries = $(ACT2000)\output\RV\files\static\Debug
+ACTLibraries = $(ACT2000)\output\RV\files\static\Release
 
 
 #
@@ -39,11 +41,14 @@ ACTLibraries = $(ACT2000)\output\RV\files\static\Debug
 Includes = -I$(SDSIncludes) -I$(ACTIncludes) -I$(VerixSrcDir)
 
 # for release version change the COptions to 
-#COptionsDBG =  -DLOGSYS_FLAG
+COptDBG =  -DLOGSYS_FLAG
+#COptDBG =  -DNDEBUG=1 -O2
 COSOptions = -DSQLITE_OS_OTHER -DSQLITE_OS_VERIX
-CSqliteOptions = -DSQLITE_DISABLE_LFS -DSQLITE_DISABLE_DIRSYNC
+CSqliteOptions = -DSQLITE_DISABLE_LFS -DSQLITE_DISABLE_DIRSYNC \
+	-DSQLITE_THREADSAFE -DSQLITE_OMIT_AUTHORIZATION \
+	-DSQLITE_OMIT_UTF16 -DSQLITE_OMIT_TCL_VARIABLE
 #CSqliteDebug = -DSQLITE_DEBUG
-COptions =  $(COSOptions) $(COptionsDBG) $(CSqliteOptions) $(CSqliteDebug) -DNDEBUG=1 -O2
+COptions = -b $(COSOptions) $(CSqliteOptions) $(COptDBG) $(CSqliteDebug) 
 
 #
 # Dependencies

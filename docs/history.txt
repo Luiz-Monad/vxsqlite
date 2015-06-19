@@ -9,4 +9,5 @@
 | 21-may-09	3.6.14.1	VxSqlite 3.6.14.1 released                         |
 | 29-may-09	3.6.14.2	VxSqlite 3.6.14.2 released                         |
 |				http://www.sqlite.org/releaselog/3_6_14_2.html     |
+| 17-jun-15	3.8.11		VxSqlite 3.8.11.0 released                         |
  ----------------------------------------------------------------------------------
